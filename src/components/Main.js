@@ -2,6 +2,8 @@ import React from "react";
 import axios from 'axios';
 import { useEffect, useState, } from "react";
 import { Icon } from '@iconify/react';
+import MapComponent from "./MapComponent";
+
 
 
 function Main() {
@@ -60,14 +62,12 @@ function Main() {
 
                 loc = latitude + ", " + longitude;
                 setUserLocationState(loc);
-                console.log("location", loc + "");
             });
         }
         else {
             console.log("Location not available")
         }
         callingAPI(userLocationState)
-        console.log("calling", loc, typeof (loc));
 
     }, [userLocationState]);
 
@@ -76,24 +76,19 @@ function Main() {
             return
         }
         let urlAPI = `https://api.weatherapi.com/v1/current.json?key=f5fe5f572bd54e4db0e80524242201&q=${location}&aqi=no`
-        console.log("Start of calling func", location)
         axios({
             method: 'get',
             url: urlAPI,
             responseType: 'stream'
         })
             .then(function (response) {
-                console.log("Start of then in calling")
                 setValues(JSON.parse(response.data))
-                console.log(urlAPI);
             })
             .catch(function (response) {
-                console.log("Start of catch in calling")
                 console.log("Error: ", response)
                 console.log(urlAPI);
             });
     }
-
 
     return (
         <div className="d-flex flex-column align-items-center justify-content-center">
@@ -111,6 +106,9 @@ function Main() {
             </form>
 
             {/* //-------------------------------------- */}
+            <div>
+              {userLocationState? <MapComponent position={userLocationState} func={callingAPI} />:<div></div>}
+            </div>
             <div>
                 <div className="bg-black text-light m-2 my-5 p-2">
                     <h1>

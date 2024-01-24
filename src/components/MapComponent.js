@@ -11,21 +11,21 @@ function MapComponent(props) {
         const map = L.map('map').setView([lat, long], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
         // const marker = L.marker([lat, long]).addTo(map);
-        // const customIcon = L.icon({
-        //     //iconUrl: 'https://media.tenor.com/WpdEISWvPDwAAAAi/shigure-ui-ui-shigure.gif', // Replace with the path to your custom marker image
-        //     // iconSize: [280, 200], // Set the size of the icon
-        //     iconSize: [280, 200], // Set the size of the icon
-        //     iconAnchor: [125, 200], // Set the anchor point for the icon
-
-        //   });
-
-
         const customIcon = L.icon({
-            iconUrl: 'https://cdn-icons-png.flaticon.com/512/535/535239.png',
-            iconSize: [30, 30], // Set the size of the icon
-            iconAnchor: [16, 38], // Set the anchor point for the icon
+            iconUrl: 'https://media.tenor.com/WpdEISWvPDwAAAAi/shigure-ui-ui-shigure.gif', // Replace with the path to your custom marker image
+            iconSize: [280, 200], // Set the size of the icon
+            iconSize: [280, 200], // Set the size of the icon
+            iconAnchor: [125, 200], // Set the anchor point for the icon
 
         });
+
+
+        // const customIcon = L.icon({
+        //     iconUrl: 'https://cdn-icons-png.flaticon.com/512/535/535239.png',
+        //     iconSize: [30, 30], // Set the size of the icon
+        //     iconAnchor: [16, 38], // Set the anchor point for the icon
+
+        // });
         const marker = L.marker([lat, long], { icon: customIcon }).addTo(map);
 
         map.on('click', (e) => {

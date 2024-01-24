@@ -75,7 +75,7 @@ function Main() {
         if (!location) {
             return
         }
-        let urlAPI = `http://api.weatherapi.com/v1/current.json?key=f5fe5f572bd54e4db0e80524242201&q=${location}&aqi=no`
+        let urlAPI = `https://api.weatherapi.com/v1/current.json?key=f5fe5f572bd54e4db0e80524242201&q=${location}&aqi=no`
         console.log("Start of calling func", location)
         axios({
             method: 'get',

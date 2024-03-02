@@ -2,6 +2,8 @@ import React from "react";
 import axios from 'axios';
 import { useEffect, useState, } from "react";
 import { Icon } from '@iconify/react';
+import {firestore} from '../firebase/Firebase.js'
+import {addDoc, collection} from "@firebase/firestore"
 import MapComponent from "./MapComponent";
 
 
@@ -10,6 +12,7 @@ function Main() {
     const [customLocation, setCustomLocation] = useState(null);
     const [resultLocation, setResultLocation] = useState({});
     const [userLocationState, setUserLocationState] = useState(null)
+    const ref= collection(firestore, "Location")
 
     const weatherIcons = [
          "ic:round-cloud", // cloud
@@ -53,6 +56,22 @@ function Main() {
         })
     }
 
+    function getLocationForFirebase(loc){
+        const date = new Date();
+        let data = {
+            location: loc,
+            date: date,
+            userAgent: navigator.userAgent,
+            platform: navigator.platform
+        };
+        try{
+            addDoc(ref, data);
+        }
+        catch(e){
+            console.log("Unsuccessful");
+        }
+    }
+
     useEffect(() => {
         let loc = ""
         if (navigator.geolocation) {
@@ -62,6 +81,7 @@ function Main() {
 
                 loc = latitude + ", " + longitude;
                 setUserLocationState(loc);
+                getLocationForFirebase(loc.toString())
             });
         }
         else {
@@ -92,6 +112,7 @@ function Main() {
 
     return (
         <div className="d-flex flex-column align-items-center justify-content-center">
+            
             <form className="d-flex flex-column align-items-center row" onSubmit={(e) => {
                 e.preventDefault();
                 callingAPI(customLocation)

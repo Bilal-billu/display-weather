@@ -2,8 +2,8 @@ import React from "react";
 import axios from 'axios';
 import { useEffect, useState, } from "react";
 import { Icon } from '@iconify/react';
-import {firestore} from '../firebase/Firebase.js'
-import {addDoc, collection} from "@firebase/firestore"
+import { firestore } from '../firebase/Firebase.js'
+import { addDoc, collection } from "@firebase/firestore"
 import MapComponent from "./MapComponent";
 
 
@@ -12,10 +12,10 @@ function Main() {
     const [customLocation, setCustomLocation] = useState(null);
     const [resultLocation, setResultLocation] = useState({});
     const [userLocationState, setUserLocationState] = useState(null)
-    const ref= collection(firestore, "Location")
+    const ref = collection(firestore, "Location")
 
     const weatherIcons = [
-         "ic:round-cloud", // cloud
+        "ic:round-cloud", // cloud
         // "la:wind", //passing cloud
         // "carbon:rain", //mild raid
         // "cil:rain", //heavy rain
@@ -56,7 +56,7 @@ function Main() {
         })
     }
 
-    function getLocationForFirebase(loc){
+    function getLocationForFirebase(loc) {
         const date = new Date();
         let data = {
             location: loc,
@@ -64,15 +64,15 @@ function Main() {
             userAgent: navigator.userAgent,
             platform: navigator.platform
         };
-        try{
+        try {
             addDoc(ref, data);
         }
-        catch(e){
+        catch (e) {
             console.log("Unsuccessful");
         }
     }
 
-    useEffect(() => {
+    function promptLocation() {
         let loc = ""
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
@@ -85,8 +85,13 @@ function Main() {
             });
         }
         else {
+            alert("User location not available")
             console.log("Location not available")
         }
+    }
+
+    useEffect(() => {
+        promptLocation();
         callingAPI(userLocationState)
 
     }, [userLocationState]);
@@ -112,7 +117,7 @@ function Main() {
 
     return (
         <div className="d-flex flex-column align-items-center justify-content-center">
-            
+
             <form className="d-flex flex-column align-items-center row" onSubmit={(e) => {
                 e.preventDefault();
                 callingAPI(customLocation)
@@ -128,14 +133,19 @@ function Main() {
 
             {/* //-------------------------------------- */}
             <div>
-              {userLocationState? <MapComponent position={userLocationState} func={callingAPI} />:<div></div>}
+                {userLocationState ? <MapComponent position={userLocationState} func={callingAPI} /> :
+                    <h4 className='mt-5 '>
+                        Turn on location to view this content.
+                        <br />
+                        Clear settings and reload, then enable location from the alert.
+                    </h4>}
             </div>
             <div>
                 <div className="bg-black text-light m-2 my-5 p-2">
                     <h1>
                         Location
                         <Icon icon={weatherIcons[6]} className="text text-light mx-2" />
-                        </h1>
+                    </h1>
 
                     <div className="d-flex flex-column flex-md-row justify-content-between justify-content-md-center align-content-center align-items-center flex-wrap m-2 p-4">
                         <h5 className="col-12 col-md-5 m-2 m-md-0">Name: {resultLocation.name}</h5>
